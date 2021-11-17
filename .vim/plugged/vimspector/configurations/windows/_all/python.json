@@ -1,0 +1,18 @@
+{
+	"configurations": {
+		"Python: Launch": {
+			"adapter":"debugpy",
+			"filetypes":["python"],
+			"configuration": {
+			"name":"Python:Launch",
+			"type":"python",
+			"request":"launch",
+			"cwd":"${workspaceRoot}",
+			"python":"C:/Python27/python.exe",
+			"stopOnEntry":true,
+			"console":"externalTerminal",
+			"program":"${file}"
+			}
+		}
+	}
+}
