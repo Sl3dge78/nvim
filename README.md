@@ -1,2 +1,3 @@
-A mettre dans C:/Users/<Username>
+Tout mettre dans C:/Users/<Username>
+init.vim dans AppData/Local/nvim
 
