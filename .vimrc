@@ -1,5 +1,4 @@
 call plug#begin()
-Plug 'puremourning/vimspector'
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -10,7 +9,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 call plug#end()
 
-let $MYVIMRC="W:/.vim/.vimrc"
+let $MYVIMRC="W:/_vim/.vimrc"
+
+set guioptions-=m 
+set guioptions-=T
+set guioptions-=r  "remove right-hand scroll bar
+set guioptions-=L  "remove left-hand scroll bar
 
 " Tabs as 4 spaces
 set tabstop=4
@@ -47,6 +51,16 @@ set cindent
 noremap é :cprev<CR>
 noremap è :cnext<CR>
 
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
+
+noremap <C-Up>    <C-w>+
+noremap <C-Down>  <C-w>-
+noremap <C-Left>  <C-w><
+noremap <C-Right> <C-w>>
+
 " Remedy setup
 :command Remedy !remedybg.exe start-debugging
 :command RemedyStop :silent !remedybg.exe stop-debugging
@@ -67,5 +81,5 @@ noremap <S-F9> :RemBreakpoint<CR>
 
 let c_no_curly_error = 1
 
-let g:coc_config_home= 'W:/.vim/'
+let g:coc_config_home= 'W:/_vim/'
 cd W:/
