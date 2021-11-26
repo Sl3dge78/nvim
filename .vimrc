@@ -71,6 +71,8 @@ let g:coc_config_home= 'W:/_vim/'
 
 "=== C Stuff ===
 let c_no_curly_error = 1
+autocmd FileType c set makeprg=build.bat
+autocmd FileType c set efm=%f:%l:%c:%m
 " Remedy setup
 :command Remedy !remedybg.exe start-debugging
 :command RemedyStop :silent !remedybg.exe stop-debugging
