@@ -36,7 +36,7 @@ let g:python3_host_prog = "C:/Python39/python.exe"
 " Theme
 set background=dark
 autocmd vimenter * ++nested colorscheme gruvbox
-set guifont=Liberation\ Mono:h12
+set guifont=Liberation\ Mono:h11
 
 " Save files on build
 set autowrite
@@ -46,6 +46,8 @@ set backspace=indent,eol,start
 
 " Auto Indentation for langs
 set cindent
+syntax enable
+filetype plugin indent on
 
 " Jump build errors
 noremap é :cprev<CR>
@@ -74,8 +76,8 @@ noremap <S-F9> :RemBreakpoint<CR>
 
 " clang_complete config
 " let g:clang_library_path='D:\Program Files\LLVM\bin'
-" let g:clang_jumpto_declaration_key="²"
-" let g:clang_jumpto_declaration_in_preview_key="<C-W>²"
+" let g:clang_jumpto_declaration_key="Â²"
+" let g:clang_jumpto_declaration_in_preview_key="<C-W>Â²"
 " let g:clang_format#auto_format=1
 " let g:clang_format#code_style="llvm"
 
@@ -83,3 +85,9 @@ let c_no_curly_error = 1
 
 let g:coc_config_home= 'W:/_vim/'
 cd W:/
+
+" Set the compiler to cargo upon opening an .rs file
+autocmd FileType rust set makeprg=cargo\ build
+autocmd FileType rust set efm=%Aerror[E%n]:\ %m,%Awarning:\ %m,%C\ \-\-\>\ %f:%l:%c
+:command Run :Spawn!cargo run
+let g:dispatch_no_terminal_start = 1
