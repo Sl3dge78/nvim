@@ -1,3 +1,5 @@
+This repo just has my personal vimrc and other vim config files
+
 ### To store vim init files elsewhere 
 - Add to the default vimrc :
 ```
