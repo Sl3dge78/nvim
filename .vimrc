@@ -45,7 +45,9 @@ set number
 " Theme
 set background=dark
 autocmd vimenter * ++nested colorscheme gruvbox
-set guifont=Liberation\ Mono:h11
+set guifont=Liberation\ Mono:h10
+let g:gruvbox_bold = 0
+let g:gruvbox_italicize_comments = 1
 
 " Make backspace behave normally
 set backspace=indent,eol,start
@@ -66,8 +68,6 @@ noremap <C-Down>  <C-w>-
 noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 
-" Coc config
-let g:coc_config_home= 'W:/_vim/'
 
 "=== C Stuff ===
 autocmd FileType c set makeprg=build.bat
