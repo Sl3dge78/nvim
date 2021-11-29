@@ -6,10 +6,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
 "Async make/commands
 Plug 'tpope/vim-dispatch'
-" lsp 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"C stuff
-Plug 'jackguo380/vim-lsp-cxx-highlight'
 call plug#end()
 
 " Start in my work folder
@@ -21,7 +17,7 @@ set guioptions-=T
 set guioptions-=r
 set guioptions-=L
 
-" Tabs as 4 spaces
+" Tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -29,7 +25,20 @@ set softtabstop=4
 set smarttab
 set startofline
 
-" Highlight current line
+" Indentation stuff
+set cindent
+syntax enable
+filetype plugin indent on
+set autoindent
+
+" File stuff
+set autoread
+set autowrite
+set directory=W:\\_vim\\temp
+set backupdir=W:\\_vim\\temp
+set undodir=W:\\_vim\\temp
+
+" Line stuff
 set cursorline
 set number
 
@@ -38,20 +47,12 @@ set background=dark
 autocmd vimenter * ++nested colorscheme gruvbox
 set guifont=Liberation\ Mono:h11
 
-" Save files on build
-set autowrite
-
 " Make backspace behave normally
 set backspace=indent,eol,start
 
-" Auto Indentation for langs
-set cindent
-syntax enable
-filetype plugin indent on
-
 " Jump build errors
-noremap Ã© :cprev<CR>
-noremap Ã¨ :cnext<CR>
+noremap é :cprev<CR>
+noremap è :cnext<CR>
 
 " Move window to window with CTRL+movement
 noremap <C-j> <C-w>j
@@ -65,19 +66,18 @@ noremap <C-Down>  <C-w>-
 noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 
-
 " Coc config
 let g:coc_config_home= 'W:/_vim/'
 
 "=== C Stuff ===
-let c_no_curly_error = 1
 autocmd FileType c set makeprg=build.bat
 autocmd FileType c set efm=%f:%l:%c:%m
+let c_no_curly_error = 1
 " Remedy setup
-:command Remedy !remedybg.exe start-debugging
-:command RemedyStop :silent !remedybg.exe stop-debugging
+:command Remedy Start remedybg.exe start-debugging
+:command RemedyStop Start! remedybg.exe stop-debugging
 :command Breakpoint :exe "silent !remedybg.exe add-breakpoint-at-file %:p " line('.')
-:command RemBreakpoint :exe "silent !remedybg.exe remove-breakpoint-at-file %:p " line('.')
+:command RemBreakpoint exe "silent !remedybg.exe remove-breakpoint-at-file %:p " line('.')
 
 noremap <F5> :Remedy<CR> 
 noremap <S-F5> :RemedyStop<CR>
