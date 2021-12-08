@@ -6,6 +6,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
 "Async make/commands
 Plug 'tpope/vim-dispatch'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 " Start in my work folder
@@ -68,11 +69,15 @@ noremap <C-Down>  <C-w>-
 noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 
+noremap <F3> :NERDTreeToggle<CR>
 
 "=== C Stuff ===
 autocmd FileType c set makeprg=build.bat
+autocmd FileType cpp set makeprg=build.bat
 autocmd FileType c set efm=%f:%l:%c:%m
+autocmd FileType cpp set efm=%f:%l:%c:%m
 let c_no_curly_error = 1
+
 " Remedy setup
 :command Remedy Start remedybg.exe start-debugging
 :command RemedyStop Start! remedybg.exe stop-debugging
