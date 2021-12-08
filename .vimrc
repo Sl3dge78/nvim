@@ -12,6 +12,9 @@ call plug#end()
 " Start in my work folder
 cd W:/
 
+" Add subfolders to search in find
+set path+=**
+
 "remove gui menus & stuff 
 set guioptions-=m
 set guioptions-=T
@@ -70,6 +73,8 @@ noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 
 noremap <F3> :NERDTreeToggle<CR>
+let NERDTreeChDirMode = 3
+let NERDTreeMinimalUI = 1
 
 "=== C Stuff ===
 autocmd FileType c set makeprg=build.bat
