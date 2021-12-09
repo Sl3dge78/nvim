@@ -21,6 +21,11 @@ set guioptions-=T
 set guioptions-=r
 set guioptions-=L
 
+" UTF-8
+
+set encoding=utf-8
+set fileencoding=utf-8
+
 " Tab stuff
 set tabstop=4
 set shiftwidth=4
