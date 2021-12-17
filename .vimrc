@@ -62,8 +62,8 @@ let g:gruvbox_italicize_comments = 1
 set backspace=indent,eol,start
 
 " Jump build errors
-noremap é :cprev<CR>
-noremap è :cnext<CR>
+noremap Ã© :cprev<CR>
+noremap Ã¨ :cnext<CR>
 
 " Move window to window with CTRL+movement
 noremap <C-j> <C-w>j
@@ -102,5 +102,21 @@ noremap <S-F9> :RemBreakpoint<CR>
 "=== Rust stuff ===
 autocmd FileType rust set makeprg=cargo\ build
 autocmd FileType rust set efm=%Aerror[E%n]:\ %m,%Awarning:\ %m,%C\ \-\-\>\ %f:%l:%c
-autocmd FileType rust :command Run :Spawn!cargo run
 let g:dispatch_no_terminal_start = 1
+
+"=== Odin stuff ===
+autocmd FileType odin set makeprg=build.bat
+autocmd FileType odin set efm=%f(%l:%c)%m
+let $ODIN="W:/_tools/odin"
+:command! OdinDoc call s:OpenOdinDoc(<f-args>)
+
+function! s:OpenOdinDoc()
+    let word_under_cursor = expand("<cword>")
+    silent! exe "noautocmd pedit odin_doc"
+    noautocmd wincmd P
+    set buftype=nofile
+    set filetype=odin
+    exe "noautocmd r! odin doc " . $ODIN . "/core/" . word_under_cursor . " -short"
+    noautocmd wincmd p
+endfunction
+noremap <F1> :OdinDoc<CR>
