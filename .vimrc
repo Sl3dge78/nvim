@@ -36,6 +36,7 @@ set startofline
 
 " Indentation stuff
 set cindent
+set cinoptions=l1
 syntax enable
 filetype plugin indent on
 set autoindent
