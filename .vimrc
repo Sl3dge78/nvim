@@ -40,6 +40,7 @@ set cinoptions=l1
 syntax enable
 filetype plugin indent on
 set autoindent
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " File stuff
 set autoread
