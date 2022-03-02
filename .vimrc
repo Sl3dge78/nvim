@@ -10,7 +10,6 @@ Plug 'preservim/nerdtree'
 call plug#end()
 
 " Start in my work folder
-cd W:/
 
 " Add subfolders to search in find
 set path+=**
@@ -20,6 +19,9 @@ set guioptions-=m
 set guioptions-=T
 set guioptions-=r
 set guioptions-=L
+
+set shortmess=a
+set cmdheight=2
 
 " UTF-8
 
@@ -56,7 +58,7 @@ set number
 " Theme
 set background=dark
 autocmd vimenter * ++nested colorscheme gruvbox
-set guifont=Liberation\ Mono:h10
+set guifont=Liberation\ Mono:h8
 let g:gruvbox_bold = 0
 let g:gruvbox_italicize_comments = 1
 
