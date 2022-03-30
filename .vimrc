@@ -6,7 +6,17 @@ Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
 "Async make/commands
 Plug 'tpope/vim-dispatch'
-Plug 'preservim/nerdtree'
+
+" File browing/opening
+"Plug 'preservim/nerdtree'
+Plug 'junegunn/fzf', { 'do':{ -> fzf#install() }}
+
+Plug 'ziglang/zig.vim'
+
+" Autocomplete
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+
 call plug#end()
 
 " Start in my work folder
@@ -19,12 +29,13 @@ set guioptions-=m
 set guioptions-=T
 set guioptions-=r
 set guioptions-=L
+set shortmess=at
+set signcolumn=number
 
 set shortmess=a
 set cmdheight=2
 
 " UTF-8
-
 set encoding=utf-8
 set fileencoding=utf-8
 
@@ -52,7 +63,7 @@ set backupdir=W:\\_vim\\temp
 set undodir=W:\\_vim\\temp
 
 " Line stuff
-set cursorline
+" set cursorline
 set number
 
 " Theme
@@ -81,10 +92,6 @@ noremap <C-Down>  <C-w>-
 noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 
-noremap <F3> :NERDTreeToggle<CR>
-let NERDTreeChDirMode = 3
-let NERDTreeMinimalUI = 1
-
 "=== C Stuff ===
 autocmd FileType c set makeprg=build.bat
 autocmd FileType cpp set makeprg=build.bat
@@ -93,12 +100,13 @@ autocmd FileType cpp set efm=%f:%l:%c:%m
 let c_no_curly_error = 1
 
 " Remedy setup
-:command Remedy Start remedybg.exe start-debugging
-:command RemedyStop Start! remedybg.exe stop-debugging
+:command RemedyOpen :silent !start remedybg.exe .rdbg
+:command RemedyStart :silent !start remedybg.exe start-debugging
+:command RemedyStop :silent !start remedybg.exe stop-debugging
 :command Breakpoint :exe "silent !remedybg.exe add-breakpoint-at-file %:p " line('.')
 :command RemBreakpoint exe "silent !remedybg.exe remove-breakpoint-at-file %:p " line('.')
 
-noremap <F5> :Remedy<CR> 
+noremap <F5> :RemedyStart<CR> 
 noremap <S-F5> :RemedyStop<CR>
 noremap <F9> :Breakpoint<CR>
 noremap <S-F9> :RemBreakpoint<CR>
@@ -124,3 +132,56 @@ function! s:OpenOdinDoc()
     noautocmd wincmd p
 endfunction
 noremap <F1> :OdinDoc<CR>
+
+" === LSP =====
+
+:lua << EOF
+    local lspconfig = require('lspconfig')
+
+    local opts = { noremap=true, silent=true }
+    vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+    -- Use an on_attach function to only map the following keys
+    -- after the language server attaches to the current buffer
+    local on_attach = function(client, bufnr)
+      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+      -- Mappings.
+      -- See `:help vim.lsp.*` for documentation on any of the below functions
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    end
+
+    -- Use a loop to conveniently call 'setup' on multiple servers and
+    -- map buffer local keybindings when the language server attaches
+    local servers = { 'zls' }
+    for _, lsp in pairs(servers) do
+      require('lspconfig')[lsp].setup {
+        on_attach = on_attach,
+        flags = {
+          -- This will be the default in neovim 0.7+
+          debounce_text_changes = 150,
+        }
+      }
+    end
+EOF
+
+" == Auto complete ==
+
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
+set completeopt=menuone,noinsert,noselect
+let g:completion_trigger_on_delete = 1
