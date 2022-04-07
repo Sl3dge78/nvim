@@ -1,13 +1,7 @@
 This repo just has my personal vimrc and other vim config files
 
 ### To store vim init files elsewhere 
-- Add to the default vimrc :
-```
-set runtimepath^=W:/_vim runtimepath+=W:/_vim/after  
-let &packpath = &runtimepath  
-let $MYVIMRC="W:/_vim/.vimrc"
-source $MYVIMRC  
-```
-
-Then clone this where you want (here in W:/\_vim)
+Just clone this where init.vim is supposed to be : 
+- Windows : ```C:\Users\guillaumec\AppData\Local\nvim```
+- Linux : ```~/.config/nvim```
  
