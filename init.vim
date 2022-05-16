@@ -1,28 +1,26 @@
 call plug#begin()
+
 " Themes
 Plug 'morhetz/gruvbox'         
 Plug 'vim-airline/vim-airline' 
-" Git
-Plug 'tpope/vim-fugitive'
-"Async make/commands
-Plug 'tpope/vim-dispatch'
+
+Plug 'tpope/vim-fugitive' " Git
+Plug 'tpope/vim-dispatch' "Async make/commands
 
 " File browing/opening
 "Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf', { 'do':{ -> fzf#install() }}
 
+Plug 'rluba/jai.vim'
 Plug 'ziglang/zig.vim'
 
 " Autocomplete
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 
+Plug 'puremourning/vimspector'
+
 call plug#end()
-
-" Start in my work folder
-
-" Add subfolders to search in find
-set path+=**
 
 "remove gui menus & stuff 
 set guioptions-=m
@@ -58,9 +56,6 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " File stuff
 set autoread
 set autowrite
-set directory=W:\\_vim\\temp
-set backupdir=W:\\_vim\\temp
-set undodir=W:\\_vim\\temp
 
 " Line stuff
 " set cursorline
@@ -134,7 +129,6 @@ endfunction
 noremap <F1> :OdinDoc<CR>
 
 " === LSP =====
-
 :lua << EOF
     local lspconfig = require('lspconfig')
 
@@ -181,7 +175,14 @@ noremap <F1> :OdinDoc<CR>
 EOF
 
 " == Auto complete ==
-
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
 set completeopt=menuone,noinsert,noselect
 let g:completion_trigger_on_delete = 1
+
+" === JAI ===
+autocmd FileType jai compiler jai
+
+
+" === VIMSPECTOR ===
+let g:vimspector_enable_mappings = 'HUMAN'
+packadd! vimspector
