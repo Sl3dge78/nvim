@@ -15,7 +15,7 @@ Plug 'ziglang/zig.vim'
 Plug 'Sl3dge78/jai.vim'
 
 " Autocomplete
-" Plug 'puremourning/vimspector'
+Plug 'puremourning/vimspector'
 Plug 'neoclide/coc.nvim', {'branch':'release'}
 
 call plug#end()
@@ -173,4 +173,4 @@ autocmd FileType jai compiler jai
 
 " === VIMSPECTOR ===
 let g:vimspector_enable_mappings = 'HUMAN'
-packadd! vimspector
+" packadd! vimspector
