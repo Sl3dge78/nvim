@@ -1,0 +1,16 @@
+{
+    "languageserver":{
+        // "zls": {
+        //    "command": "zls",
+        //    "filetypes":["zig"]
+        // },
+        "jai": {
+            "command" : "/home/sl3dge/work/prog/jai_sandbox/jai_lsp",
+            "args": [
+                "-build_file",
+                "build.jai"
+            ],
+            "filetypes":["jai"]
+        }
+    }
+}
