@@ -13,7 +13,6 @@ Plug 'junegunn/fzf', { 'do':{ -> fzf#install() }}
 
 Plug 'rluba/jai.vim'
 Plug 'ziglang/zig.vim'
-Plug 'Sl3dge78/jai.vim'
 
 " Autocomplete
 Plug 'neovim/nvim-lspconfig'
@@ -28,7 +27,7 @@ set guioptions-=r
 set guioptions-=L
 set shortmess=at
 set signcolumn=number
-au VimEnter * GuiPopupmenu 0
+" au VimEnter * GuiPopupmenu 0
 
 set shortmess=a
 " set cmdheight=2
