@@ -13,6 +13,9 @@ Plug 'rluba/jai.vim'
 Plug 'ziglang/zig.vim'
 
 Plug 'puremourning/vimspector'
+Plug 'rust-lang/rust.vim'
+Plug 'neovim/nvim-lspconfig'
+
 call plug#end()
 
 "remove gui menus & stuff 
@@ -47,6 +50,8 @@ set breakindentopt=shift:2,sbr
 " File stuff
 set autoread
 set autowrite
+set nobackup
+set nowritebackup
 
 " Line stuff
 set number
@@ -101,9 +106,7 @@ let g:vimspector_enable_mappings = 'HUMAN'
 " noremap <S-F9> :RemBreakpoint<CR>
 
 "=== Rust stuff ===
-autocmd FileType rust set makeprg=cargo\ build
-autocmd FileType rust set efm=%Aerror[E%n]:\ %m,%Awarning:\ %m,%C\ \-\-\>\ %f:%l:%c
-"let g:dispatch_no_terminal_start = 1
+let g:cargo_makeprg_params = 'build'
 
 " === JAI ===
 let g:jai_compiler = "jai"
@@ -127,67 +130,49 @@ command! -nargs=1 JaiDoc call s:OpenJaiDoc(<f-args>)
 
 " === FZF ===
 noremap <F1> :FZF<CR>
-
-" === COC ===
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" 
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
 " === LSP =====
-" :lua << EOF
-"     local lspconfig = require('lspconfig')
-" 
-"     local opts = { noremap=true, silent=true }
-"     vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-"     vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-"     vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-"     vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-" 
-"     -- Use an on_attach function to only map the following keys
-"     -- after the language server attaches to the current buffer
-"     local on_attach = function(client, bufnr)
-"       vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-" 
-"       -- Mappings.
-"       -- See `:help vim.lsp.*` for documentation on any of the below functions
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-"       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-"     end
-" 
-"     -- Use a loop to conveniently call 'setup' on multiple servers and
-"     -- map buffer local keybindings when the language server attaches
-"     local servers = { 'zls', 'clangd' }
-"     for _, lsp in pairs(servers) do
-"       require('lspconfig')[lsp].setup {
-"         on_attach = on_attach,
-"         flags = {
-"           -- This will be the default in neovim 0.7+
-"           debounce_text_changes = 150,
-"         }
-"       }
-"     end
-" EOF
+:lua << EOF
+    local lspconfig = require('lspconfig')
+
+    local opts = { noremap=true, silent=true }
+    vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+    -- Use an on_attach function to only map the following keys
+    -- after the language server attaches to the current buffer
+    local on_attach = function(client, bufnr)
+      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+      -- Mappings.
+      -- See `:help vim.lsp.*` for documentation on any of the below functions
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    end
+
+    require('lspconfig')['rust_analyzer'].setup {
+        on_attach = on_attach,
+        flags = lsp_flags,
+        -- Server-specific settings...
+        settings = {
+          ["rust-analyzer"] = {}
+        }
+    }
+EOF
 
 " == Auto complete ==
-" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
-" set completeopt=menuone,noinsert,noselect
-" let g:completion_trigger_on_delete = 1
-
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
+set completeopt=menuone,noinsert,noselect
+let g:completion_trigger_on_delete = 1
