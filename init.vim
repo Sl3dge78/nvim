@@ -8,6 +8,7 @@ Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-dispatch' " Async make/commands
 
 Plug 'junegunn/fzf', { 'do':{ -> fzf#install() }}
+Plug 'junegunn/fzf.vim'
 
 Plug 'rluba/jai.vim'
 Plug 'ziglang/zig.vim'
@@ -129,7 +130,7 @@ endfunction
 command! -nargs=1 JaiDoc call s:OpenJaiDoc(<f-args>)
 
 " === FZF ===
-noremap <F1> :FZF<CR>
+noremap <F1> :GFiles<CR>
 " === LSP =====
 :lua << EOF
     local lspconfig = require('lspconfig')
