@@ -186,11 +186,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
     -- https://github.com/razzmatazz/csharp-language-server
     lspconfig['csharp_ls'].setup {
         cmd = {"csharp-ls"},
-      -- cmd = { "C:/users/guillaumec/Downloads/omnisharp-win-x64-net6.0/OmniSharp.exe", "--language-server", "--hostPID", tostring(vim.fn.getpid()) },
-      -- cmd = { 'mono', '--assembly-loader=strict', "C:/users/guillaumec/Downloads/omnisharp-win-x64/OmniSharp.exe" },
-      -- root_dir = lspconfig.util.root_pattern("*.sln"),
       on_attach = on_attach,
-      -- use_mono = true,
     }
 EOF
 
